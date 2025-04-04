@@ -3,6 +3,7 @@ import random
 def print_board(board):
     print("\n")
     for i in range(0, 9, 3):
+
         print(f" {board[i]} | {board[i+1]} | {board[i+2]} ")
         if i < 6:
             print("-----------")
@@ -35,7 +36,7 @@ def ai_move(board):
     # Сначала проверяем, может ли AI выиграть сразу
     for i in range(9):
         if board[i] == " ":
-            board[i] = "O"
+            board[i] = "0"
             if check_win(board, "O"):
                 return i
             board[i] = " "
@@ -45,29 +46,32 @@ def ai_move(board):
         if board[i] == " ":
             board[i] = "X"
             if check_win(board, "X"):
-                board[i] = "O"
+                board[i] = "0"
                 return i
             board[i] = " "
 
     # Если центр свободен - занимаем его
     if board[4] == " ":
         return 4
-
-    # Занимаем любой свободный угол
-    corners = [0, 2, 6, 8]
-    random.shuffle(corners)
-    for i in corners:
-        if board[i] == " ":
-            return i
-
+    if board [4] == "0":
     # Занимаем любую свободную сторону
-    sides = [1, 3, 5, 7]
-    random.shuffle(sides)
-    for i in sides:
-        if board[i] == " ":
-            return i
+        sides = [1, 3, 5, 7]
+        random.shuffle(sides)
+        for i in sides:
+            if board[i] == " ":
+                return i
+
+    if board[4] == "X":
+    # Занимаем любой свободный угол
+        corners = [0, 2, 6, 8]
+        random.shuffle(corners)
+        for i in corners:
+            if board[i] == " ":
+                return i
+
 
 def main():
+    risyet = [str(i+1) for i in range(9)]
     board = [" "] * 9
     current_player = "X"
 
@@ -75,15 +79,17 @@ def main():
     print("Вы играете за 'X'. Вводите числа 1-9, как на клавиатуре:")
 
     while True:
-        print_board(board)
+        print_board(risyet)
 
         if current_player == "X":
             move = player_move(board)
             board[move] = "X"
+            risyet[move] = "X"
         else:
             print("Ход компьютера (O):")
             move = ai_move(board)
-            board[move] = "O"
+            board[move] = "0"
+            risyet[move] = "0"
 
         if check_win(board, current_player):
             print_board(board)
@@ -95,7 +101,7 @@ def main():
             print("Ничья!")
             break
 
-        current_player = "O" if current_player == "X" else "X"
+        current_player = "0" if current_player == "X" else "X"
 
     play_again = input("Хотите сыграть еще раз? (Y/N): ").upper()
     if play_again == "Y":
